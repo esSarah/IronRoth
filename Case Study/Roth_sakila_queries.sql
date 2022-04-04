@@ -44,5 +44,27 @@ SELECT district_id, COUNT(client_id) FROM bank.client GROUP BY district_id HAVIN
 #Query 14
 SELECT card.type, count(card.type) FROM card GROUP BY card.type;
 
-#optional
+#Optional
+
+#Query 15
+SELECT account_id, sum(amount) FROM bank.loan cl GROUP BY account_id ORDER BY sum(amount) DESC LIMIT 10;
+
+#query 16
+SELECT l.date, count(l.loan_id) FROM bank.loan l GROUP BY l.date HAVING l.date<930907;
+
+#query 17
+SELECT l.date, l.duration, count(l.loan_id) FROM bank.loan l GROUP BY l.date HAVING  left(CONVERT(l.date, char(6)),4)='9712' ORDER BY l.date, l.duration;
+
+#query 18
+SELECT t.account_id, t.type, sum(t.amount) AS total_amount 
+FROM (SELECT trans.account_id, trans.trans_id, trans.type,  trans.amount FROM bank.trans WHERE trans.account_id=396) t 
+GROUP BY t.type;
+
+SELECT t.account_id, t.transaction_type, sum(t.total) AS total_amount 
+FROM (SELECT trans.account_id, trans.trans_id, REPLACE(REPLACE(trans.type,'PRIJEM','INCOMING'),'VYDAJ','OUTGOING') AS transaction_type,  CONVERT(trans.amount,UNSIGNED INTEGER) AS total FROM bank.trans WHERE trans.account_id=396) t 
+GROUP BY t.transaction_type;
+
+SELECT t.account_id, t.transaction_type, sum(t.total) AS total_amount 
+FROM (SELECT trans.account_id, trans.trans_id, REPLACE(trans.type,'PRIJEM','INCOMING') AS Incoming ,REPLACE('VYDAJ','OUTGOING') AS Outgoing,  CONVERT(trans.amount,UNSIGNED INTEGER) AS total FROM bank.trans WHERE trans.account_id=396 AND Outgoing,) t 
+GROUP BY t.transaction_type;
 
