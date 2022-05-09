@@ -1,3 +1,4 @@
 
 API/config.py
 *.exe
+NLP/data/amazon_reviews_us_Outdoors_v1_00.tsv
